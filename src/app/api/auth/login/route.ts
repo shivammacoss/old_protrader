@@ -76,12 +76,14 @@ export async function POST(request: Request) {
     });
 
     // Set user session cookie
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
     response.cookies.set('session', session, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       expires,
       sameSite: 'lax',
       path: '/',
+      ...(isProduction && { domain: undefined }), // Let browser handle domain
     });
 
     return response;

@@ -75,9 +75,10 @@ export async function POST(request: Request) {
     });
 
     // Set admin session cookie
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
     response.cookies.set('admin_session', session, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       expires,
       sameSite: 'lax',
       path: '/',
